@@ -1,5 +1,5 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import FormInput from "../../components/formComponents/FormInput";
 import FormSelect from "../../components/formComponents/FormSelect";
@@ -8,13 +8,16 @@ import * as Yup from "yup";
 import { PageNumbers } from "../../interface/home";
 import { IRequisitionDetails } from "../../interface/forms";
 import { genderOptions, urgencyOptions } from "./constants";
-import { useData } from "./DataProvider";
+import DataProvider, { useData } from "./DataProvider";
 
 
-const RequisitionDetailsForm: React.FC<{
+const RequisitionDetailsForm: React.FC<{ 
   handleTab: (n: PageNumbers) => void;
 }> = ({ handleTab }) => {
 
+  const context = useData()
+
+  
   const {
     handleChange,
     errors,
@@ -48,9 +51,8 @@ const RequisitionDetailsForm: React.FC<{
   });
 
   
-
-  const updateContextValues = () => {
-    setState((prevState:any) => ({
+  useEffect(()=>{
+    context?.setState((prevState:any) => ({
       ...prevState,
       requisitionDetails: {
         ...prevState.requisitionDetails,
@@ -60,7 +62,11 @@ const RequisitionDetailsForm: React.FC<{
         gender: values.gender,
       },
     }));
-  };
+
+  },[context, values])
+  
+
+  
 
 
   return (

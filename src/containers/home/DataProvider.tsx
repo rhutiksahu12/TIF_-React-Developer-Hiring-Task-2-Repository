@@ -38,7 +38,8 @@ const DataProvider: React.FC<{ children: React.ReactNode }> = ({
 
 
 export const useData = () => {
-  return useContext(DataContext);
+  return useContext(DataContext)
+  
 };
 
 export default DataProvider;

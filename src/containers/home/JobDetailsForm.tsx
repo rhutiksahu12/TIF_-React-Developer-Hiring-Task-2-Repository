@@ -1,10 +1,11 @@
 import { Button, Flex, Box } from "@chakra-ui/react";
-import React from "react";
+import React, {useEffect} from "react";
 import FormInput from "../../components/formComponents/FormInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PageNumbers } from "../../interface/home";
 import { IJobDetails } from "../../interface/forms";
+import { useData } from "./DataProvider";
 
 const JobDetailsForm: React.FC<{
   handleTab: (n: PageNumbers) => void;
@@ -27,6 +28,24 @@ const JobDetailsForm: React.FC<{
         handleTab(2);
       },
     });
+
+    const context = useData();
+    useEffect(()=>{
+      context?.setState((prevState:any) => ({
+        ...prevState,
+        jobDetails: {
+          ...prevState.jobDetails,
+          jobDetails: values.jobDetails,
+          jobLocation: values.jobLocation,
+          jobTitle: values.jobTitle,
+  
+        },
+      }));
+  
+    },[context, values])
+
+
+
 
   return (
     <Box width="100%" as="form" onSubmit={handleSubmit as any}>
@@ -65,7 +84,7 @@ const JobDetailsForm: React.FC<{
           <Button colorScheme="gray" type="button" onClick={() => handleTab(0)}>
             Previous
           </Button>
-          <Button colorScheme="red" type="submit">
+          <Button colorScheme="red" onClick={()=>handleTab(2)} type="submit">
             Next
           </Button>
         </Flex>
